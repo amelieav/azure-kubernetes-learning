@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Distributed Server Monitor</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Distributed Server Monitor</h1>
+    <div id="system-status" class="status status-degraded">SYSTEM STATUS: ...</div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Servers</h2>
+      <div class="actions">
+        <button onclick="createJob()">Create Test Job</button>
+        <button onclick="failNode('server-a')">Fail Server A</button>
+        <button onclick="recoverNode('server-a')">Recover Server A</button>
+        <button onclick="slowNode('server-a')">Slow Server A</button>
+        <button onclick="injectAnomaly('server-a')">Anomaly Server A</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Server</th><th>Status</th><th>Temp</th><th>Power</th>
+          <th>CPU</th><th>Mem</th><th>Last HB</th><th>Jobs</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="nodes-body"></tbody>
+    </table>
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>Active / Past Jobs</h2>
+      <table>
+        <thead>
+          <tr><th>Job</th><th>Type</th><th>Status</th><th>Node</th><th>Attempts</th></tr>
+        </thead>
+        <tbody id="jobs-body"></tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Alerts</h2>
+      <ul id="alerts-list" class="alerts"></ul>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Event Log</h2>
+    <ul id="events-list" class="events"></ul>
+  </section>
+
+  <script src="/app.js"></script>
+</body>
+</html>
