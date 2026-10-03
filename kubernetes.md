@@ -58,8 +58,35 @@ kubectl apply -f k8s
 kubectl -n telemetry-demo get pods --watch
 ```
 
+If image pulling is failing, go to ARC > Access Control IAM and add role assignment for AcrPull.
+
+Or if it's to do with agent pool, go to agent pool and Azure Role Assignments and grant it ArcPull then refresh.
+
+Can force a refresh with:
+
+```
+kubectl rollout restart deployment/server -n telemetry-demo
+kubectl rollout restart deployment/monitoring -n telemetry-demo
+```
+
 ## 5. Scale and inspect
 
+Expose public IP:
+`kubectl -n telemetry-demo get svc monitoring`
+
+Save to powershell env with:
+```
+$env:APP_IP = kubectl -n telemetry-demo get svc monitoring `
+  --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+
+So can then test endpoints with:
+
+```Invoke-RestMethod "http://${env:APP_IP}:8000/health"```
+
+```Invoke-RestMethod "http://$env:APP_IP`:8000/nodes"```
+
+**Scaling commands:**
 ```powershell
 kubectl -n telemetry-demo scale deployment/server --replicas=5
 kubectl -n telemetry-demo get pods
@@ -68,31 +95,11 @@ kubectl -n telemetry-demo logs deployment/server
 kubectl -n telemetry-demo get svc monitoring
 ```
 
-The server deployment sets `NODE_ID` from each pod's Kubernetes-generated name,
-so scaling creates distinct logical nodes without hardcoding three IDs:
-
-```powershell
-kubectl -n telemetry-demo scale deployment/server --replicas=5
-```
-
-Get the public address:
-
-```powershell
-$env:APP_IP = kubectl -n telemetry-demo get svc monitoring `
-  --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
-Invoke-RestMethod "http://$env:APP_IP/health"
-```
-
-Open `http://$env:APP_IP` in a browser. Test failover from the dashboard; the
-buttons use the actual pod-derived node IDs shown in the node table. To call
-the API directly, first choose an ID from `/nodes`:
-
-```powershell
-Invoke-RestMethod "http://$env:APP_IP/nodes"
-Invoke-RestMethod -Method Post -Uri "http://$env:APP_IP/nodes/<node-id>/fail"
-```
-
 ## 6. Clean up
+
+Assign env:
+
+`$env:RESOURCE_GROUP = "YOUR RESOURCE GROUP NAME"`
 
 ```powershell
 kubectl delete namespace telemetry-demo

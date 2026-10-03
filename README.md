@@ -1,5 +1,12 @@
 # Azure Kubernetes Application
 
+This project simulates a small distributed data centre. Three server
+simulators generate telemetry and heartbeats while a central monitoring API
+tracks health, processes workloads, raises alerts, and demonstrates failover
+when a server becomes unhealthy.
+
+<img src="dashboard.png" alt="Distributed server monitoring dashboard" width="700">
+
 ## Prerequisites
 Install...
 - [ ] Docker
@@ -86,3 +93,7 @@ ASSIGNMENT_TIMEOUT=30
 TEMP_ALERT_C=80
 POWER_ALERT_W=700
 ```
+
+## For Azure + Kubernetes Setup
+
+Refer to [kubernetes.md](kubernetes.md)
