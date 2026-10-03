@@ -1,0 +1,23 @@
+services:
+  monitoring:
+    build:
+      context: .
+      dockerfile: Dockerfile.monitoring
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    environment:
+      MONITORING_URL: http://monitoring:8000
+    depends_on:
+      monitoring:
+        condition: service_healthy

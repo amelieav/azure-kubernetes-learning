@@ -13,7 +13,25 @@ Install...
 
 `kubectl get po -A` - lists all pods in your cluster
 
-`minikube dashboard` - opens web based ui for kubernetes 
+`minikube dashboard` - opens web based ui for kubernetes
+
+**Docker**
+`docker compose up --build -d` - Start the system in the background
+
+`docker compose logs -f` - View logs from all services
+
+`docker compose logs -f server` - Or only the server logs
+
+`Invoke-RestMethod http://localhost:8000/health` - Test the monitoring API:
+`Invoke-RestMethod http://localhost:8000/nodes` - Test the monitoring API:
+
+`docker compose up --build -d --scale server=3` - Scale the server service:
+
+`docker compose ps` - Check the scaled containers:
+
+`docker compose up -d --scale server=1` - Scale back down
+
+`docker compose down` - Stop and remove the containers
  
 ## Running
 
